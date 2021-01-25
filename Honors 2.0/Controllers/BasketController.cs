@@ -7,7 +7,6 @@ using Honors_2._0.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
-
 namespace Honors_2._0.Controllers
 {
     [Route("/api/[controller]")]
@@ -23,17 +22,18 @@ namespace Honors_2._0.Controllers
             _productService = productService;
         }
 
-
         [HttpPost]
         public async Task<IEnumerable<Products>> GetUserBasket()
         {
-            string UserID = HttpContext.Session.GetString("UserID");
-            if (UserID != null)
+           string UserID = HttpContext.Session.GetString("UserID");
+           if(UserID != null)
             {
+
                 return await _basketService.GetBasketProductsProductsByUserID(UserID);
-            }
+            } 
             else
             {
+
                 return null;
             }
         }

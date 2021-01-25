@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 
 namespace Honors_2._0.Domain.Models
-{ 
-
+{
     public partial class Basket
     {   
         public Basket() { }
         public Basket(Users user)
         {
             User = user;
+            BasketId = Guid.NewGuid().ToString();
             BasketProducts = new HashSet<BasketProducts>();
         }
 
@@ -20,4 +20,3 @@ namespace Honors_2._0.Domain.Models
         public virtual ICollection<BasketProducts> BasketProducts { get; set; }
     }
 }
-

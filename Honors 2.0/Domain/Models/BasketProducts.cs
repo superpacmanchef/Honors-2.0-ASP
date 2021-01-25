@@ -6,7 +6,7 @@ namespace Honors_2._0.Domain.Models
     public partial class BasketProducts
     {   
         public BasketProducts() { }
-        public BasketProducts(string basketID ,  string productID , int quantity)
+        public BasketProducts(string basketID , string productID , int quantity)
         {
             BasketId = basketID;
             ProductId = productID;
