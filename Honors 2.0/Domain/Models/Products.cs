@@ -9,6 +9,7 @@ namespace Honors_2._0.Domain.Models
         {
             BasketProducts = new HashSet<BasketProducts>();
             OrderProducts = new HashSet<OrderProducts>();
+            ProductId = Guid.NewGuid().ToString();
             Reviews = new HashSet<Reviews>();
         }
 

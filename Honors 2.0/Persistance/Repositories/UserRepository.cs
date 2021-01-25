@@ -19,7 +19,9 @@ namespace Honors_2._0.Persistance.Repositories
 
         public async Task<int> CreateUser(Users user)
         {
+            Basket basket = new Basket(user);
             await _context.Users.AddAsync(user);
+            await _context.Basket.AddAsync(basket);
             try
             {
                 return await _context.SaveChangesAsync();
@@ -37,7 +39,9 @@ namespace Honors_2._0.Persistance.Repositories
 
         public async Task<Users> GetUserByEmail(string Email)
         {
-            return await _context.Users.FirstAsync(u => u.Email == Email);
+            Users u = new Users();
+            var r = await _context.Users.FirstAsync(u => u.Email == Email);
+            return r;
         }
 
         public async Task<Users> GetUserByUserID(string UserID)

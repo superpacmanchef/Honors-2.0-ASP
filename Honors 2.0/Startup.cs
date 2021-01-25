@@ -10,6 +10,10 @@ using Honors_2._0.Services;
 using System;
 using Honors_2._0.Domain.Repository;
 using Honors_2._0.Persistance.Repositories;
+using Microsoft.AspNetCore.Identity;
+using Honors_2._0.Domain.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace Honors_2._0
 {
@@ -29,12 +33,9 @@ namespace Honors_2._0
              options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
-            services.AddDbContextPool<Honors20Context>(options =>
-            {
-                options.UseMySQL(Configuration.GetConnectionString("default"));
-            });
-
-
+                services.AddDbContext<Honors20Context>(options =>
+                    options.UseMySql(
+                        Configuration.GetConnectionString("Default")));
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUsersRepository , UserRepository>();
@@ -49,18 +50,17 @@ namespace Honors_2._0
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<IReviewService, ReviewService>();
 
-            services.AddDistributedMemoryCache();
+            var redisConfigurationOptions = ConfigurationOptions.Parse("localhost:6379");
+            services.AddStackExchangeRedisCache(redisCacheConfig =>
+            {
+                redisCacheConfig.ConfigurationOptions = redisConfigurationOptions;
+            });
 
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromSeconds(1000);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
-            });
-
-            services.AddAuthentication("CookieAuth").AddCookie("CookieAuth" , config =>
-            {   
-                config.LoginPath = "/api/User/Login";
             });
 
         }

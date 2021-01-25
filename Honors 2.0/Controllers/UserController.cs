@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Honors_2._0.Domain.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Honors_2._0.Controllers
 {
@@ -15,9 +17,10 @@ namespace Honors_2._0.Controllers
     {
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService  )
         {
             _userService = userService;
+
         }
 
         [HttpPost]
@@ -43,6 +46,7 @@ namespace Honors_2._0.Controllers
         public async Task<int> Register([FromForm] string Email , [FromForm] string Password , [FromForm] string FirstName , [FromForm] string Surname)
         {
             return await _userService.Register(Email, Password, FirstName, Surname);
+            
         }
 
         

@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 
 namespace Honors_2._0.Domain.Models
-{ 
+{
     public partial class Reviews
-    {   
-        public Reviews() {}
-        public Reviews(Users user , Products product , string review)
+    {   public Reviews() { }
+        public Reviews(Users user , Products product , string reviewString)
         {
             User = user;
             Product = product;
-            Review = review;
+            Review = reviewString;
         }
-
         public string ProductId { get; set; }
         public string UserId { get; set; }
         public string Review { get; set; }
