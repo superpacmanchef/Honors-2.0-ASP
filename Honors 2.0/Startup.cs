@@ -10,10 +10,8 @@ using Honors_2._0.Services;
 using System;
 using Honors_2._0.Domain.Repository;
 using Honors_2._0.Persistance.Repositories;
-using Microsoft.AspNetCore.Identity;
-using Honors_2._0.Domain.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using StackExchange.Redis;
+using Microsoft.AspNetCore.Http;
 
 namespace Honors_2._0
 {
@@ -33,9 +31,11 @@ namespace Honors_2._0
              options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
-                services.AddDbContext<Honors20Context>(options =>
+            services.AddDbContext<Honors20Context>(options =>
                     options.UseMySql(
                         Configuration.GetConnectionString("Default")));
+
+
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUsersRepository , UserRepository>();
@@ -73,6 +73,8 @@ namespace Honors_2._0
                 app.UseDeveloperExceptionPage();
             }
 
+          
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -80,6 +82,26 @@ namespace Honors_2._0
             app.UseAuthorization();
 
             app.UseSession();
+
+            app.Use(async (context, next) =>
+            {
+                if (context.Request.Path.ToString().Contains("/api/product") || context.Request.Path.ToString().Contains("/api/user"))
+                {
+                    await next();
+                }
+                else
+                {
+                    if (context.Session.GetString("UserID") != null)
+                    {
+                        await next();
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 401;
+                        context.Response.WriteAsync("Unauthorised").Wait();
+                    }
+                }
+            });
 
             app.UseEndpoints(endpoints =>
             {

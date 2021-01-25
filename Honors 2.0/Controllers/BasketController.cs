@@ -16,7 +16,7 @@ namespace Honors_2._0.Controllers
         private readonly IBasketService _basketService;
         private readonly IProductService _productService;
 
-        public BasketController(IBasketService basketService , IProductService productService)
+        public BasketController(IBasketService basketService, IProductService productService)
         {
             _basketService = basketService;
             _productService = productService;
@@ -25,17 +25,17 @@ namespace Honors_2._0.Controllers
         [HttpPost]
         public async Task<IEnumerable<Products>> GetUserBasket()
         {
-           string UserID = HttpContext.Session.GetString("UserID");
-           if(UserID != null)
+            string UserID = HttpContext.Session.GetString("UserID");
+            if (UserID != null)
             {
 
                 return await _basketService.GetBasketProductsProductsByUserID(UserID);
-            } 
+            }
             else
             {
-
                 return null;
             }
+       
         }
 
         [HttpPost]

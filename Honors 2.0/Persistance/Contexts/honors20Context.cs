@@ -1,8 +1,6 @@
 ﻿using System;
 using Honors_2._0.Domain.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Honors_2._0.Persistance.Contexts
 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Honors_2._0.Domain.Models
+﻿namespace Honors_2._0.Domain.Models
 {
     public partial class BasketProducts
     {   
