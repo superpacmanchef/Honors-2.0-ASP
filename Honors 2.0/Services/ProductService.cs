@@ -28,16 +28,15 @@ namespace Honors_2._0.Services
             return await _productRepository.GetProductbyProductID(ProductID);
         }
 
-        public async Task<IEnumerable<Products>> GetProductPage(int NumberPerPage, int PageNumber, string Catagory)
+        public async Task<IEnumerable<Products>> GetProductCatagoryPage(int NumberPerPage, int PageNumber, string Catagory)
         {
-            if (Catagory != null)
-            {
+
                 return await _productRepository.GetProductPageCatagory(NumberPerPage , PageNumber , Catagory);
-            }
-            else
-            {
+        }
+
+        public async Task<IEnumerable<Products>> GetProductPage(int NumberPerPage, int PageNumber)
+        {
                 return await _productRepository.GetProductPage(NumberPerPage, PageNumber);
-            }
         }
 
         public async Task<int> UpdateNumberOfProductsRemaining(string ProductID, int NumberBought)

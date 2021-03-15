@@ -9,7 +9,7 @@ namespace Honors_2._0.Domain.Services
     public interface IBasketService
     {
         Task<IEnumerable<Products>> GetBasketProductsProductsByUserID(string UserID);
-        Task<int> AddProductToBasket(string UserID , Products products , int Quantity);
+        Task<int> AddProductToBasket(string UserID , string ProductID , int Quantity);
         Task<int> RemoveProductFromBasket(string ProductID, string UserID);
         Task<int> RemoveAllProductsFromBasket(string UserID);
         Task<Basket> GetBasketByUserID(string UserID);

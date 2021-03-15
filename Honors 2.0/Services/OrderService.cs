@@ -12,6 +12,7 @@ namespace Honors_2._0.Services
     {
         private readonly IOrdersRepository _orderRepository;
         private readonly IOrderProductsRepository _orderProductRepository;
+        private readonly IProductRepository _productRepository;
 
         public OrderService(IOrdersRepository ordersRepository, IOrderProductsRepository orderProductsRepository )
         {
@@ -33,12 +34,12 @@ namespace Honors_2._0.Services
             return 1;
         }
 
-        public Task<IEnumerable<Orders>> GetUserOrders(string UserID)
+        public Task<IEnumerable<Orders>> GetUserOrderIds(string UserID)
         {
-            throw new NotImplementedException();
+            return _orderRepository.GetOrdersIDByUserID(UserID);
         }
 
-        public async Task<IEnumerable<Products>> GetUserOrderProductsByOrderID(string OrderID)
+        public async Task<IEnumerable<OrderProducts>> GetUserOrderProductsByOrderID(string OrderID)
         {
             return await _orderProductRepository.GetProductsByOrderID(OrderID);
         }

@@ -28,7 +28,14 @@ namespace Honors_2._0.Persistance.Repositories
 
         public async Task<IEnumerable<BasketProducts>> GetBasketProductsByBasketID(string BasketID)
         {
-            return await _context.BasketProducts.Where(bp => bp.BasketId == BasketID).ToListAsync();
+            return await _context.BasketProducts.Where(bp => bp.BasketId == BasketID).Include(bp => bp.Product).Select(bp => new BasketProducts
+            {
+                ProductId = bp.ProductId,
+                BasketId = bp.BasketId,
+                Quantity = bp.Quantity,
+                Product = bp.Product
+
+            }).ToListAsync();
         }
 
         public async Task<int> AddProductToBasket(BasketProducts basketProduct)

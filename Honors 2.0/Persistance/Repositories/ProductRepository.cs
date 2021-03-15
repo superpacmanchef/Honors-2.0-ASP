@@ -31,7 +31,7 @@ namespace Honors_2._0.Persistance.Repositories
 
         public async Task<Products> GetProductbyProductID(string ProductID)
         {
-            Products product = await _context.Products.Include(p => p.BasketProducts).FirstOrDefaultAsync(p => p.ProductId == ProductID);
+            Products product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == ProductID);
             return product;
         }
 

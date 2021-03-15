@@ -8,7 +8,7 @@ namespace Honors_2._0.Domain.Repository
 {
     public interface IOrderProductsRepository
     {
-        public Task<IEnumerable<Products>> GetProductsByOrderID(string BasketID);
+        public Task<IEnumerable<OrderProducts>> GetProductsByOrderID(string BasketID);
         public Task<int> InsertProductIntoOrder(OrderProducts orderProducts);
 
     }

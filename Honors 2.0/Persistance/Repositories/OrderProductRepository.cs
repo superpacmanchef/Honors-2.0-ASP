@@ -17,9 +17,16 @@ namespace Honors_2._0.Persistance.Repositories
         {
         }
 
-        public async Task<IEnumerable<Products>> GetProductsByOrderID(string OrderID)
+        public async Task<IEnumerable<OrderProducts>> GetProductsByOrderID(string OrderID)
         {
-            return await _context.OrderProducts.Where(op => op.OrderId == OrderID).Select(op => op.Product).ToListAsync();
+            return await _context.OrderProducts.Where(op => op.OrderId == OrderID).Include(op => op.Product).Select(op => new OrderProducts
+            {
+                ProductId = op.ProductId,
+                OrderId = op.OrderId,
+                Quantity = op.Quantity,
+                Product = op.Product
+
+            }).ToListAsync();
         }
 
         public async Task<int> InsertProductIntoOrder(OrderProducts orderProducts)

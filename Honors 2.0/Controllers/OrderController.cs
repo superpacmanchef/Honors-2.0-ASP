@@ -1,4 +1,5 @@
-﻿using Honors_2._0.Domain.Models;
+﻿
+using Honors_2._0.Domain.Models;
 using Honors_2._0.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,9 +29,24 @@ namespace Honors_2._0.Controllers
         }
 
         [HttpPost]
-        public async Task<IEnumerable<Products>> GetOrderByOrderID([FromForm] string OrderID)
+        public async Task<List<IEnumerable<OrderProducts>>> GetOrderByOrderID()
         {
-            return await _orderService.GetUserOrderProductsByOrderID(OrderID);
+            string UserID = HttpContext.Session.GetString("UserID");
+            if(UserID != null)
+            {
+                IEnumerable<Orders> orders = await _orderService.GetUserOrderIds(UserID);
+                List<IEnumerable<OrderProducts>> orderProducts = new List<IEnumerable<OrderProducts>>();
+                foreach(var order in orders)
+                {
+                    var r = await _orderService.GetUserOrderProductsByOrderID(order.OrderId);
+                    orderProducts.Add(r);
+                }
+                return orderProducts;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         [HttpPost]
@@ -38,8 +54,12 @@ namespace Honors_2._0.Controllers
         public async Task<int> OrderBasket()
         {
             string UserID = HttpContext.Session.GetString("UserID");
-            if (UserID != null)
+            try
             {
+                if (UserID == null)
+                {
+                    throw new UnauthorizedAccessException();
+                }
                 Users user = await _userservice.GetUserByUserID(UserID);
                 IEnumerable<BasketProducts> basketProducts = await _basketService.GetBasketProductsByUserID(UserID);
                 BasketProducts[] productsArray = basketProducts.ToArray();
@@ -51,8 +71,10 @@ namespace Honors_2._0.Controllers
                 }
                 return 1;
             }
-            else
+            catch (Exception e)
             {
+                HttpContext.Response.StatusCode = 401;
+                HttpContext.Response.WriteAsync(e.Message.ToString()).Wait();
                 return 0;
             }
         }

@@ -19,17 +19,24 @@ namespace Honors_2._0.Controllers
             _productService = productService;
         }
 
-
-        [HttpGet("{productId}")]
-        public async Task<Products> GetProductByProductIDAsync(string productId)
+        [HttpGet]
+        public async Task<Products> GetProductByProductIDAsync([FromQuery]string productId)
         {
             return await _productService.GetProductByProductID(productId);
         }
 
-        [HttpGet("page")]
-        public async Task<IEnumerable<Products>> GetProductsPage([FromQuery]int NumberPerPage , [FromQuery]int PageNumber , [FromQuery]string Catagory)
+        [HttpGet("page-catagory")]
+        public async Task<IEnumerable<Products>> GetProductsCatagoryPage([FromQuery]float NumberPerPage , [FromQuery]int PageNumber , [FromQuery]string Catagory)
         {
-            return await _productService.GetProductPage(NumberPerPage ,PageNumber , Catagory);
+            int page = (int)Math.Floor(NumberPerPage);
+            return await _productService.GetProductCatagoryPage(page ,PageNumber , Catagory);
+        }
+
+        [HttpGet("page")]
+        public async Task<IEnumerable<Products>> GetProductsyPage([FromQuery] float NumberPerPage, [FromQuery] int PageNumber)
+        {
+            int page = (int) Math.Floor(NumberPerPage);
+            return await _productService.GetProductPage(page, PageNumber);
         }
 
         [HttpPut]
@@ -39,6 +46,7 @@ namespace Honors_2._0.Controllers
         }
 
         [HttpDelete]
+        [Route("delete")]
         public async Task<int> DeleteProduct([FromForm] string ProductId)
         {
             return await _productService.DeleteProduct(ProductId);

@@ -9,8 +9,8 @@ namespace Honors_2._0.Domain.Services
     public interface IOrderService
     {
         Task<int> OrderBasket(IEnumerable<BasketProducts> products, Users user);
-        Task<IEnumerable<Orders>> GetUserOrders(string UserID);
-        Task<IEnumerable<Products>> GetUserOrderProductsByOrderID(string OrderID);
+        Task<IEnumerable<Orders>> GetUserOrderIds(string UserID);
+        Task<IEnumerable<OrderProducts>> GetUserOrderProductsByOrderID(string OrderID);
 
     }
 }

@@ -29,15 +29,17 @@ namespace Honors_2._0.Persistance.Repositories
             };
 
         }
-        public async Task<Basket> GetBasketByUserID(string UserID)
+        public async Task<Basket> GetBasketByUserID(string UserID) 
         {
-            return await _context.Basket.Include(b => b.BasketProducts).FirstOrDefaultAsync(b => b.UserId == UserID);
+            return await _context.Basket.Include(b => b.BasketProducts).AsNoTracking().FirstOrDefaultAsync(b => b.UserId == UserID);
         }
 
         public async Task<string> GetBasketIDByUserID(string UserID)
         {
-            Basket basket = await _context.Basket.FirstAsync(b => b.UserId == UserID);
+            Basket basket = await _context.Basket.FirstOrDefaultAsync(b => b.UserId == UserID);
             return basket.BasketId;
+
         }
     }
 }
+ 

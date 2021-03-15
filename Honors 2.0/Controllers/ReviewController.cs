@@ -24,14 +24,14 @@ namespace Honors_2._0.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Route("product")]
-        public async Task<IEnumerable<Reviews>> GetReviewsByProductID([FromForm]string ProductID)
+        public async Task<IEnumerable<Reviews>> GetReviewsByProductID([FromQuery]string ProductID)
         {
             return await _reviewService.GetReviewsByProductID(ProductID);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("user")]
         public async Task<IEnumerable<Reviews>> GetReviewsByUserID()
         {

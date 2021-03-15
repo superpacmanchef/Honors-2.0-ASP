@@ -22,14 +22,14 @@ namespace Honors_2._0.Controllers
             _productService = productService;
         }
 
-        [HttpPost]
-        public async Task<IEnumerable<Products>> GetUserBasket()
+        [HttpGet]
+        public async Task<IEnumerable<BasketProducts>> GetUserBasket()
         {
             string UserID = HttpContext.Session.GetString("UserID");
             if (UserID != null)
             {
 
-                return await _basketService.GetBasketProductsProductsByUserID(UserID);
+                return await _basketService.GetBasketProductsByUserID(UserID);
             }
             else
             {
@@ -43,13 +43,18 @@ namespace Honors_2._0.Controllers
         public async Task<int> InsertProductToBasket([FromForm] string ProductID , [FromForm] int Quantity)
         {
             string UserID = HttpContext.Session.GetString("UserID");
-            if (UserID != null)
-            {
-                Products products = await _productService.GetProductByProductID(ProductID);
-                return await _basketService.AddProductToBasket(UserID, products, Quantity);
+            try 
+            {   if(UserID == null)
+                {
+                    throw new UnauthorizedAccessException();
+                }
+                return await _basketService.AddProductToBasket(UserID, ProductID, Quantity);
             }
-            else
-            {
+            catch(UnauthorizedAccessException e)
+            {   
+                
+                HttpContext.Response.StatusCode = 401;
+                HttpContext.Response.WriteAsync(e.Message.ToString()).Wait();
                 return 0;
             }
         }
@@ -58,12 +63,17 @@ namespace Honors_2._0.Controllers
         public async Task<int> RemoveProductFromBasket( [FromForm] string ProductID)
         {
             string UserID = HttpContext.Session.GetString("UserID");
-            if (UserID != null)
-            {
+            try
+            {   if(UserID == null)
+                {
+                    throw new UnauthorizedAccessException();
+                }
                 return await _basketService.RemoveProductFromBasket(UserID, ProductID);
             }
-            else
+            catch (UnauthorizedAccessException e)
             {
+                HttpContext.Response.StatusCode = 401;
+                HttpContext.Response.WriteAsync(e.Message.ToString()).Wait();
                 return 0;
             }
         }

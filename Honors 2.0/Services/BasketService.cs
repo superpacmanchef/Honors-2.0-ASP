@@ -18,13 +18,12 @@ namespace Honors_2._0.Services
             _basketProductsRepository = basketProductRepository;
         }
 
-        public async Task<int> AddProductToBasket(string UserID , Products products , int Quantity)
+        public async Task<int> AddProductToBasket(string UserID , string ProductID , int Quantity)
         {
-            Basket basket = await _basketRepository.GetBasketByUserID(UserID);
-            BasketProducts basketProducts = new BasketProducts(basket.BasketId, products.ProductId, Quantity);
+            string basketID = await _basketRepository.GetBasketIDByUserID(UserID);
+            BasketProducts basketProducts = new BasketProducts(basketID, ProductID, Quantity);
             return await _basketProductsRepository.AddProductToBasket(basketProducts);
-               
-            throw new NotImplementedException();
+
         }
 
         public async Task<IEnumerable<Products>> GetBasketProductsProductsByUserID(string UserID)
@@ -53,9 +52,10 @@ namespace Honors_2._0.Services
 
         public async Task<int> RemoveProductFromBasket(string UserID, string ProductID)
         {
-            Basket basket = await _basketRepository.GetBasketByUserID(UserID);
-            BasketProducts basketProduct = await _basketProductsRepository.GetProductFromBasket(basket.BasketId, ProductID);
-            return await _basketProductsRepository.RemoveProductFromBasket(basketProduct);
+                string basketID = await _basketRepository.GetBasketIDByUserID(UserID);
+                BasketProducts basketProduct = await _basketProductsRepository.GetProductFromBasket(basketID, ProductID);
+                return await _basketProductsRepository.RemoveProductFromBasket(basketProduct);
+    
         }
     }
 }

@@ -59,8 +59,6 @@ namespace Honors_2._0
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromSeconds(1000);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
             });
 
         }
@@ -73,8 +71,6 @@ namespace Honors_2._0
                 app.UseDeveloperExceptionPage();
             }
 
-          
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -85,21 +81,28 @@ namespace Honors_2._0
 
             app.Use(async (context, next) =>
             {
-                if (context.Request.Path.ToString().Contains("/api/product") || context.Request.Path.ToString().Contains("/api/user"))
+                try
                 {
-                    await next();
-                }
-                else
-                {
-                    if (context.Session.GetString("UserID") != null)
+                    if (context.Request.Path.ToString().Contains("/api/product") || context.Request.Path.ToString().Contains("/api/user") || !context.Request.Path.ToString().Contains("/api/product/Delete"))
                     {
                         await next();
                     }
                     else
                     {
-                        context.Response.StatusCode = 401;
-                        context.Response.WriteAsync("Unauthorised").Wait();
+                        if (context.Session.GetString("UserID") != null)
+                        {
+                            await next();
+                        }
+                        else
+                        {
+
+                        }
                     }
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    context.Response.StatusCode = 401;
+                    context.Response.WriteAsync("Unauthorised").Wait();
                 }
             });
 
